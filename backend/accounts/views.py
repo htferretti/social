@@ -276,6 +276,9 @@ class AuthViewSet(viewsets.ViewSet):
         Update user profile picture.
         Expected fields: profile_picture (file)
         """
+        print(f"[DEBUG] update_profile_picture called by user: {request.user.username}")
+        print(f"[DEBUG] FILES in request: {list(request.FILES.keys())}")
+        
         if 'profile_picture' not in request.FILES:
             return Response(
                 {'detail': 'profile_picture file is required'},
@@ -283,6 +286,7 @@ class AuthViewSet(viewsets.ViewSet):
             )
 
         profile_picture = request.FILES['profile_picture']
+        print(f"[DEBUG] File received: {profile_picture.name}, size: {profile_picture.size}, type: {profile_picture.content_type}")
 
         # Validate file size (max 5MB)
         if profile_picture.size > 5 * 1024 * 1024:
@@ -313,11 +317,17 @@ class AuthViewSet(viewsets.ViewSet):
         except UserProfile.DoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
 
+        print(f"[DEBUG] Saving profile_picture to profile...")
         profile.profile_picture = profile_picture
         profile.save()
+        
+        print(f"[DEBUG] Profile saved. URL: {profile.profile_picture.url if profile.profile_picture else 'None'}")
 
         return Response(
-            {'detail': 'Profile picture updated successfully'},
+            {
+                'detail': 'Profile picture updated successfully',
+                'url': profile.profile_picture.url if profile.profile_picture else None
+            },
             status=status.HTTP_200_OK
         )
 
