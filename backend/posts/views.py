@@ -98,7 +98,11 @@ class LikedPosts(generics.ListAPIView):
     def get_queryset(self):
         # Order by when the user liked the post (Like.created_at), most recent first
         liked_posts = Like.objects.filter(user=self.request.user).order_by('-created_at')
-        post_ids = liked_posts.values_list('post_id', flat=True)
+        post_ids = list(liked_posts.values_list('post_id', flat=True))
+        
+        if not post_ids:
+            return Post.objects.none()
+        
         # Return posts in the same order as they appear in the likes
         posts = Post.objects.filter(id__in=post_ids)
         # Preserve the order from likes queryset
