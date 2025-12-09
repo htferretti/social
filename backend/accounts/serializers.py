@@ -16,12 +16,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['cpf', 'profile_picture', 'created_at']
 
     def get_profile_picture(self, obj):
-        """Return absolute URL for profile picture if it exists"""
+        """Return URL for profile picture (Cloudinary or default)"""
         if obj.profile_picture:
-            request = self.context.get('request')
-            if request is not None:
-                return request.build_absolute_uri(obj.profile_picture.url)
+            # Cloudinary já retorna URL completa
             return obj.profile_picture.url
+        # Retorna None se não tiver foto (frontend usa default)
         return None
 
 

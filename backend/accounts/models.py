@@ -19,7 +19,6 @@ class UserProfile(models.Model):
     )
     profile_picture = models.ImageField(
         upload_to='profile_pictures/',
-        default='default/default_profile.jpg',
         null=True,
         blank=True
     )
