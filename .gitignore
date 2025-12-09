@@ -65,3 +65,6 @@ htmlcov/
 *.bak
 *.tmp
 .coverage
+
+# Deployment
+DEPLOY.md
