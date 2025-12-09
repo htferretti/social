@@ -58,6 +58,8 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 # Production CORS settings
 if not DEBUG:
     CORS_ALLOW_CREDENTIALS = True
+    # Trusted origins for CSRF
+    CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
